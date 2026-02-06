@@ -63,10 +63,8 @@ public class VehiclePage extends JScrollPane {
 		addBtn.setBorderPainted(false);
 		addBtn.setCursor(new Cursor(Cursor.HAND_CURSOR));
 
-		// 버튼 클릭 시 AddStation 화면으로 이동
 		addBtn.addActionListener(e -> {
 			Window parentWindow = SwingUtilities.getWindowAncestor(this);
-			// AddStation이 JDialog인 경우
 				AddStationDialog addPage = new AddStationDialog((Frame) parentWindow);
 				addPage.setVisible(true);		
 		});

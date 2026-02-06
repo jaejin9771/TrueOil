@@ -131,9 +131,7 @@ public class RepairPage extends JScrollPane {
             // 예: INSERT INTO reservations (shop_id, user_id, date, note) VALUES (...)
             JOptionPane.showMessageDialog(null, selectedShopName + "에 예약이 완료되었습니다.");
         });
-        
         body.add(submitBtn);
-
         return card;
     }
 

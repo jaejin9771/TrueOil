@@ -98,8 +98,6 @@ public class StationPage extends JScrollPane {
     private JPanel createStationListSection() {
         JPanel card = createBaseCard("📄 실시간 유가 목록");
         JPanel body = (JPanel) card.getComponent(1);
-
-        // 2열 그리드 배치 (잘림 방지를 위해 hgap/vgap 15 설정)
         JPanel gridContainer = new JPanel(new GridLayout(0, 2, 15, 15));
         gridContainer.setOpaque(false);
 
