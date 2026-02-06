@@ -66,7 +66,7 @@ public class EditProfileDialog extends JDialog {
         titleLabel.setFont(new Font(Font.SANS_SERIF, Font.BOLD, 20));
         titleLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
 
-        /* ===== 입력 폼 영역 (Login의 formWrapper 스타일) ===== */
+        /* ===== 입력 폼 영역 ===== */
         JPanel formWrapper = new JPanel();
         formWrapper.setLayout(new BoxLayout(formWrapper, BoxLayout.Y_AXIS));
         formWrapper.setBackground(Color.WHITE);
@@ -95,7 +95,7 @@ public class EditProfileDialog extends JDialog {
         // 주행 거리 필드
         addInput(formWrapper, "주행 거리 (km)", mileageF = new JTextField(currentMileage), labelFont, fieldSize);
 
-        /* ===== 하단 버튼 (Login 버튼 스타일로 중앙 배치) ===== */
+        /* ===== 하단 버튼  ===== */
         saveBtn = new JButton("저장");
         saveBtn.setBackground(new Color(37, 99, 235));
         saveBtn.setForeground(Color.WHITE);
