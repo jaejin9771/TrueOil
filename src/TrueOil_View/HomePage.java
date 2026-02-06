@@ -46,7 +46,7 @@ public class HomePage extends JScrollPane {
         String diffPrice = "20원";   // apiResponse.getDiff()
         String trend = "하락";       // apiResponse.getTrend() 
 
-        JLabel content = new JLabel("오늘 전국 평균 휘발유 가격은 리터당 " + avgPrice + "원으로 지난주 대비 " + diffPrice + " " + trend + "했습니다.");
+        JLabel content = new JLabel("오늘 전국 평균 휘발유 가격은 리터당 " + avgPrice + "으로 지난주 대비 " + diffPrice + " " + trend + "했습니다.");
         content.setFont(new Font(Font.SANS_SERIF, Font.PLAIN, 15));
         content.setAlignmentX(Component.LEFT_ALIGNMENT);
         

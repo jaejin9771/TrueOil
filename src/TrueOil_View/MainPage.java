@@ -31,8 +31,14 @@ public class MainPage extends JFrame {
         logoutBtn.setBorder(new EmptyBorder(0, 20, 0, 20));
         logoutBtn.setContentAreaFilled(false);
         logoutBtn.addActionListener(e -> {
-            new Login().setVisible(true); 
-            dispose();
+            // 1. 확인 다이얼로그 띄우기 (부모를 MainPage.this로 지정)
+            int confirm = JOptionPane.showConfirmDialog(
+                MainPage.this, "로그아웃 하시겠습니까?", "로그아웃 확인", 
+                JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
+            if (confirm == JOptionPane.YES_OPTION) {
+                new Login().setVisible(true); 
+                MainPage.this.dispose(); 
+            }
         });
         headerPanel.add(logoutBtn, BorderLayout.EAST);
 
