@@ -21,7 +21,7 @@ public class MainPage extends JFrame {
         headerPanel.setBackground(Color.WHITE);
         headerPanel.setBorder(new MatteBorder(0, 0, 1, 0, new Color(229, 231, 235)));
 
-        JLabel logoLabel = new JLabel("⛽ TrueOil/Carset");
+        JLabel logoLabel = new JLabel("⛽ TrueOil");
         logoLabel.setFont(new Font(Font.SANS_SERIF, Font.BOLD, 20));
         logoLabel.setBorder(new EmptyBorder(15, 20, 15, 20));
         headerPanel.add(logoLabel, BorderLayout.WEST);

@@ -175,7 +175,8 @@ public class MyPage extends JPanel {
         b.setFont(new Font(Font.SANS_SERIF, Font.BOLD, 14));
         b.setBorder(new LineBorder(new Color(209, 213, 219)));
         b.setCursor(new Cursor(Cursor.HAND_CURSOR));
-        b.setMaximumSize(new Dimension(Integer.MAX_VALUE, 50)); 
+        b.setPreferredSize(new Dimension(b.getPreferredSize().width, 60));
+        b.setMaximumSize(new Dimension(Integer.MAX_VALUE, 60)); 
 
         b.addMouseListener(new MouseAdapter() {
             public void mouseEntered(MouseEvent e) { b.setBackground(new Color(249, 250, 251)); }
