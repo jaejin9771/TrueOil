@@ -1,9 +1,18 @@
 package TrueOil_View;
 
+import org.jfree.chart.ChartFactory;
+import org.jfree.chart.ChartPanel;
+import org.jfree.chart.JFreeChart;
+import org.jfree.chart.axis.CategoryAxis;
+import org.jfree.chart.axis.NumberAxis;
+import org.jfree.chart.plot.CategoryPlot;
+import org.jfree.chart.plot.PlotOrientation;
+import org.jfree.chart.renderer.category.BarRenderer;
+import org.jfree.data.category.DefaultCategoryDataset;
+
 import javax.swing.*;
 import javax.swing.border.*;
 import java.awt.*;
-import java.awt.event.*;
 
 public class VehiclePage extends JScrollPane {
 
@@ -25,12 +34,68 @@ public class VehiclePage extends JScrollPane {
 
         container.add(createHealthSection());
         container.add(Box.createVerticalStrut(25));
-        container.add(createFuelHistorySection()); 
+        container.add(createFuelHistorySection());
         container.add(Box.createVerticalStrut(25));
         container.add(createStatsSection());
 
         container.add(Box.createVerticalStrut(60));
         setViewportView(container);
+    }
+
+    private JPanel createStatsSection() {
+        JPanel card = createBaseCard("📊 월별 주유비 통계");
+        JPanel body = (JPanel) card.getComponent(1);
+
+        DefaultCategoryDataset dataset = new DefaultCategoryDataset();
+        dataset.addValue(250000, "주유비", "1월");
+        dataset.addValue(280000, "주유비", "2월");
+        dataset.addValue(320000, "주유비", "3월");
+        dataset.addValue(300000, "주유비", "4월");
+        dataset.addValue(290000, "주유비", "5월");
+        dataset.addValue(310000, "주유비", "6월");
+
+        JFreeChart chart = ChartFactory.createBarChart(
+                null, 
+                null, 
+                null, 
+                dataset,
+                PlotOrientation.VERTICAL,
+                false, 
+                true, 
+                false
+        );
+
+        customizeChart(chart);
+
+        ChartPanel chartPanel = new ChartPanel(chart);
+        chartPanel.setPreferredSize(new Dimension(0, 300));
+        chartPanel.setBackground(Color.WHITE);
+        
+        body.add(chartPanel);
+
+        return card;
+    }
+
+    private void customizeChart(JFreeChart chart) {
+        chart.setBackgroundPaint(Color.WHITE);
+        CategoryPlot plot = chart.getCategoryPlot();
+        plot.setBackgroundPaint(Color.WHITE);
+        plot.setOutlineVisible(false);
+        plot.setRangeGridlinePaint(new Color(229, 231, 235));
+
+        BarRenderer renderer = (BarRenderer) plot.getRenderer();
+        renderer.setSeriesPaint(0, new Color(37, 99, 235));
+        renderer.setItemMargin(0.5);
+        renderer.setShadowVisible(false);
+        renderer.setDrawBarOutline(false);
+
+        CategoryAxis domainAxis = plot.getDomainAxis();
+        domainAxis.setTickLabelFont(new Font(Font.SANS_SERIF, Font.PLAIN, 12));
+        domainAxis.setAxisLineVisible(false);
+
+        NumberAxis rangeAxis = (NumberAxis) plot.getRangeAxis();
+        rangeAxis.setTickLabelFont(new Font(Font.SANS_SERIF, Font.PLAIN, 12));
+        rangeAxis.setAxisLineVisible(false);
     }
 
     private JPanel createFuelHistorySection() {
@@ -40,9 +105,6 @@ public class VehiclePage extends JScrollPane {
         JPanel gridContainer = new JPanel(new GridLayout(0, 2, 15, 15));
         gridContainer.setOpaque(false);
 
-        /** [DB POINT] 데이터 로드
-         * SELECT * FROM fuel_records ORDER BY log_date DESC LIMIT 6
-         */
         loadFuelData(gridContainer);
 
         body.add(gridContainer);
@@ -57,20 +119,12 @@ public class VehiclePage extends JScrollPane {
         addBtn.setBorderPainted(false);
         addBtn.setCursor(new Cursor(Cursor.HAND_CURSOR));
 
-        /** [기능 포인트] AddStationDialog 연동 로직
-         * - 버튼 클릭 시 AddStationDialog를 모달(Modal)로 띄움
-         * - 다이얼로그에서 저장이 완료되면(isSuccess) UI 새로고침 실행
-         */
         addBtn.addActionListener(e -> {
             Window parentWindow = SwingUtilities.getWindowAncestor(this);
-            // 만약 AddStationDialog 생성자에 Frame이 필요하다면 (Frame)parentWindow 전달
             AddStationDialog dialog = new AddStationDialog((Frame) parentWindow);
             dialog.setVisible(true);
-
-            // 다이얼로그 작업이 끝난 후 성공 여부에 따라 UI 갱신 로직 필요, 근데 이건 addstation과 연결됨
-            
         });
-        
+
         JPanel btnWrapper = new JPanel(new FlowLayout(FlowLayout.CENTER));
         btnWrapper.setOpaque(false);
         btnWrapper.add(addBtn);
@@ -79,17 +133,13 @@ public class VehiclePage extends JScrollPane {
         return card;
     }
 
-    /** [기능 포인트] 데이터 로딩 전용 메서드
-     * - 초기 실행 시 및 기록 추가 후 UI 갱신을 위해 분리
-     */
     private void loadFuelData(JPanel container) {
         container.removeAll();
-        // 실제 구현 시 DAO를 통해 DB 데이터를 가져와야 함
         String[][] history = {
-            {"2026-01-25", "주유소 A", "45,000원", "30L"},
-            {"2026-01-18", "주유소 B", "40,000원", "26L"},
-            {"2026-01-12", "주유소 C", "50,000원", "32L"},
-            {"2026-01-05", "주유소 D", "38,000원", "24L"}
+                {"2026-01-25", "주유소 A", "45,000원", "30L"},
+                {"2026-01-18", "주유소 B", "40,000원", "26L"},
+                {"2026-01-12", "주유소 C", "50,000원", "32L"},
+                {"2026-01-05", "주유소 D", "38,000원", "24L"}
         };
 
         for (String[] h : history) {
@@ -101,8 +151,8 @@ public class VehiclePage extends JScrollPane {
         JPanel item = new JPanel(new BorderLayout(10, 0));
         item.setBackground(Color.WHITE);
         item.setBorder(new CompoundBorder(
-            new LineBorder(new Color(241, 245, 249)), 
-            new EmptyBorder(15, 18, 15, 18)
+                new LineBorder(new Color(241, 245, 249)),
+                new EmptyBorder(15, 18, 15, 18)
         ));
 
         JPanel left = new JPanel(new GridLayout(2, 1, 0, 3));
@@ -138,56 +188,31 @@ public class VehiclePage extends JScrollPane {
         mileageBox.setBackground(new Color(249, 250, 251));
         mileageBox.setBorder(new CompoundBorder(new LineBorder(new Color(229, 231, 235)), new EmptyBorder(20, 25, 20, 25)));
         mileageBox.setMaximumSize(new Dimension(Integer.MAX_VALUE, 90));
-        
-        /** [DB POINT] SELECT current_mileage FROM vehicles */
+
         JLabel mLabel = new JLabel("<html><font color='gray' size='4'>현재 총 주행거리</font><br><b style='font-size:18pt; color:#1e293b;'>50,000 km</b></html>");
         mileageBox.add(mLabel, BorderLayout.WEST);
-        
+
         body.add(mileageBox);
         body.add(Box.createVerticalStrut(25));
 
         JPanel grid = new JPanel(new GridLayout(0, 2, 20, 20));
         grid.setOpaque(false);
-        
-        /** [DB POINT] 소모품 계산 로직 바인딩 */
-        grid.add(createHealthItem("엔진 오일", 85, new Color(34, 197, 94)));
-        grid.add(createHealthItem("타이어", 65, new Color(234, 179, 8)));
-        grid.add(createHealthItem("브레이크 패드", 40, new Color(234, 88, 12)));
-        grid.add(createHealthItem("배터리", 90, new Color(34, 197, 94)));
+
+        Object[][] healthItems = {
+                {"엔진 오일", 50, new Color(34, 197, 94)},
+                {"타이어", 65, new Color(234, 179, 8)},
+                {"브레이크 패드", 40, new Color(234, 88, 12)},
+                {"배터리", 90, new Color(34, 197, 94)}
+        };
+
+        for (Object[] item : healthItems) {
+            String name = (String) item[0];
+            int value = (int) item[1];
+            Color color = (Color) item[2];
+            grid.add(createHealthItem(name, value, color));
+        }
 
         body.add(grid);
-        return card;
-    }
-
-    private JPanel createStatsSection() {
-        JPanel card = createBaseCard("📊 월별 주유비 통계");
-        JPanel body = (JPanel) card.getComponent(1);
-
-        int[] monthlyExpenses = {25, 28, 32, 30, 29, 31}; 
-        String[] months = {"1월", "2월", "3월", "4월", "5월", "6월"};
-
-        JPanel chartPanel = new JPanel() {
-            @Override
-            protected void paintComponent(Graphics g) {
-                super.paintComponent(g);
-                Graphics2D g2 = (Graphics2D) g;
-                g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-                int w = getWidth(); int h = getHeight() - 50; 
-                int leftPadding = 60; int chartW = w - 90; int chartH = h - 40;
-                int maxVal = 40; int barSpace = chartW / 6; int barW = barSpace - 35;
-
-                for (int i = 0; i < monthlyExpenses.length; i++) {
-                    int x = leftPadding + (i * barSpace) + (barSpace - barW) / 2;
-                    int barHeight = (int) ((double) monthlyExpenses[i] / maxVal * chartH);
-                    g2.setPaint(new GradientPaint(x, h - barHeight, new Color(96, 165, 250), x, h, new Color(37, 99, 235)));
-                    g2.fillRoundRect(x, h - barHeight, barW, barHeight, 10, 10);
-                }
-            }
-        };
-        chartPanel.setPreferredSize(new Dimension(0, 280));
-        chartPanel.setBackground(Color.WHITE);
-        body.add(chartPanel);
-
         return card;
     }
 

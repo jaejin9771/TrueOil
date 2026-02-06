@@ -1,3 +1,3 @@
-cd /d "C:\Java\TrueOil"
-java -cp bin TrueOil_Carset.Login
+cd /d "C:\Users\dita_810\TrueOil"
+java -cp bin TrueOil_View.Login
 pause
