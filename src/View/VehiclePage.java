@@ -1,4 +1,4 @@
-package TrueOil_View;
+package View;
 
 import javax.swing.*;
 import javax.swing.border.*;
